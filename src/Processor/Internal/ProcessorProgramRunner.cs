@@ -118,7 +118,7 @@ namespace Processor.Internal
 
         private string GetDefaultCategory(Type t)
         {
-            return t.Assembly.FullName;
+            return t.Assembly.GetName().Name;
         }
 
         private static void DisplayMainMenu(ConsoleMenu consoleMenu)
