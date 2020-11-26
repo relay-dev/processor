@@ -1,15 +1,16 @@
-﻿using System;
+﻿using Processor.ConsoleApp;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Processor.ConsoleApp
+namespace Processor.Internal
 {
-    public class ProcessorConsoleSubApp
+    internal class ProcessorSubProgramRunner
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public ProcessorConsoleSubApp(IServiceProvider serviceProvider)
+        public ProcessorSubProgramRunner(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
@@ -56,7 +57,7 @@ namespace Processor.ConsoleApp
                         }
                         else if (processor.GetType().GetInterfaces().Contains(typeof(IProcessor<,>)) || processor.GetType().GetInterfaces().Contains(typeof(IProcessor<>)))
                         {
-                            Try(async () =>
+                            Execute(async () =>
                             {
                                 Type inputType = processor.GetType().GenericTypeArguments[0];
 
@@ -67,7 +68,7 @@ namespace Processor.ConsoleApp
                         }
                         else
                         {
-                            Try(async () =>
+                            Execute(async () =>
                             {
                                 await ((IProcessor)processor).ProcessAsync(cancellationToken);
                             });
@@ -77,7 +78,7 @@ namespace Processor.ConsoleApp
             }
         }
 
-        private static void Try(Action action)
+        private static void Execute(Action action)
         {
             try
             {

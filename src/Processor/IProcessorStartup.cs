@@ -2,7 +2,7 @@
 
 namespace Processor
 {
-    public interface IStartup
+    public interface IProcessorStartup
     {
         void ConfigureServices(IServiceCollection services);
     }

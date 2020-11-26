@@ -1,17 +1,17 @@
-﻿using Processor.Internal;
+﻿using Processor.ConsoleApp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Processor.ConsoleApp
+namespace Processor.Internal
 {
-    public class ProcessorConsoleApp
+    internal class ProcessorProgramRunner
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public ProcessorConsoleApp(IServiceProvider serviceProvider)
+        public ProcessorProgramRunner(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
@@ -48,7 +48,7 @@ namespace Processor.ConsoleApp
                     }
                     else
                     {
-                        var subApp = new ProcessorConsoleSubApp(_serviceProvider);
+                        var subApp = new ProcessorSubProgramRunner(_serviceProvider);
 
                         await subApp.RunAsync(consoleMenuItem, cancellationToken);
                     }

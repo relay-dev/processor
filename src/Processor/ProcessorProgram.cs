@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Processor.ConsoleApp;
 using Processor.Internal;
 using System;
 using System.Threading;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Processor
 {
-    public class ProcessorProgram<TStartup> where TStartup : IStartup
+    public class ProcessorProgram<TStartup> where TStartup : IProcessorStartup
     {
         protected static async Task RunAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -42,7 +41,7 @@ namespace Processor
             AddProcessorTypes(services);
 
             // Create the Startup
-            IStartup startup = (TStartup)Activator.CreateInstance(typeof(TStartup), new object[] { config });
+            IProcessorStartup startup = (TStartup)Activator.CreateInstance(typeof(TStartup), new object[] { config });
 
             if (startup == null)
             {
@@ -56,7 +55,7 @@ namespace Processor
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
             // Create the program
-            var application = new ProcessorConsoleApp(serviceProvider);
+            var application = new ProcessorProgramRunner(serviceProvider);
 
             try
             {

@@ -5,7 +5,7 @@ using Processor.Samples.Services.Impl;
 
 namespace Processor.Samples
 {
-    public class Startup : IStartup
+    public class Startup : IProcessorStartup
     {
         private readonly IConfiguration _configuration;
 

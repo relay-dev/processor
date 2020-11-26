@@ -2,7 +2,7 @@
 
 namespace Processor.ConsoleApp
 {
-    public class ConsoleMenuItem : MenuItem
+    public class ConsoleMenuItem : ConsoleMenuItemBase
     {
         public List<ConsoleSubMenuItem> Processors { get; }
 
