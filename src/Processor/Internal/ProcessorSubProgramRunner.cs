@@ -109,7 +109,7 @@ namespace Processor.Internal
                 Console.WriteLine(" ({0}) {1}", processor.Key, processor.Name);
             }
 
-            Console.WriteLine("{0}Enter {1}{2} (enter ( h ) to return to the home menu)", Environment.NewLine, consoleMenuItem.Processors.Min(s => s.Key), consoleMenuItem.Processors.Count == 1 ? string.Empty : " - " + consoleMenuItem.Processors.Max(sm => sm.Key));
+            Console.WriteLine("{0}Enter {1}{2} (enter 'h' to return to the home menu)", Environment.NewLine, consoleMenuItem.Processors.Min(s => s.Key), consoleMenuItem.Processors.Count == 1 ? string.Empty : " - " + consoleMenuItem.Processors.Max(sm => sm.Key));
         }
     }
 }

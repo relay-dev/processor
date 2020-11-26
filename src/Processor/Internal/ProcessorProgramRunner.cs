@@ -132,7 +132,7 @@ namespace Processor.Internal
                 Console.WriteLine(" ({0}) {1}", consoleAppMenu.Key, consoleAppMenu.Name);
             }
 
-            Console.WriteLine("{0}Enter {1} - {2} (enter ( x ) to exit)", Environment.NewLine, consoleMenu.ConsoleMenuItems.Min(s => s.Key), consoleMenu.ConsoleMenuItems.Max(s => s.Key));
+            Console.WriteLine("{0}Enter {1}{2} (enter 'x' to exit)", Environment.NewLine, consoleMenu.ConsoleMenuItems.Min(s => s.Key), consoleMenu.ConsoleMenuItems.Count == 1 ? string.Empty : " - " + consoleMenu.ConsoleMenuItems.Max(s => s.Key));
         }
     }
 }
