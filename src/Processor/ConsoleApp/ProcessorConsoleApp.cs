@@ -71,7 +71,7 @@ namespace Processor.ConsoleApp
                     ProcessorAttribute processorAttribute =
                         (ProcessorAttribute)t.GetCustomAttributes(typeof(ProcessorAttribute), true).Single();
 
-                    return processorAttribute.Category ?? t.Namespace;
+                    return processorAttribute.Category ?? GetDefaultCategory(t);
                 })
                 .OrderBy(s => s)
                 .Distinct()
@@ -89,7 +89,7 @@ namespace Processor.ConsoleApp
                         ProcessorAttribute processorAttr =
                             (ProcessorAttribute)t.GetCustomAttributes(typeof(ProcessorAttribute), true).Single();
 
-                        return (processorAttr.Category ?? t.Namespace) == name;
+                        return (processorAttr.Category ?? GetDefaultCategory(t)) == name;
                     })
                     .ToList();
 
@@ -114,6 +114,11 @@ namespace Processor.ConsoleApp
             }
 
             return new ConsoleMenu(consoleMenuItems);
+        }
+
+        private string GetDefaultCategory(Type t)
+        {
+            return t.Assembly.FullName;
         }
 
         private static void DisplayMainMenu(ConsoleMenu consoleMenu)
