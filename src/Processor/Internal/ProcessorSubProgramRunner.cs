@@ -1,4 +1,5 @@
-﻿using Processor.ConsoleApp;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Processor.ConsoleApp;
 using System;
 using System.Linq;
 using System.Threading;
@@ -47,7 +48,9 @@ namespace Processor.Internal
                     {
                         Console.Clear();
 
-                        object processor = _serviceProvider.GetService(consoleSubMenuItem.ProcessorType);
+                        IServiceProvider scopedServiceProvider = _serviceProvider.CreateScope().ServiceProvider;
+
+                        object processor = scopedServiceProvider.GetService(consoleSubMenuItem.ProcessorType);
 
                         if (!processor.GetType().GetInterfaces().Contains(typeof(IProcessor<,>)) && !processor.GetType().GetInterfaces().Contains(typeof(IProcessor<>)) && !processor.GetType().GetInterfaces().Contains(typeof(IProcessor)))
                         {
@@ -57,7 +60,7 @@ namespace Processor.Internal
                         }
                         else if (processor.GetType().GetInterfaces().Contains(typeof(IProcessor<,>)) || processor.GetType().GetInterfaces().Contains(typeof(IProcessor<>)))
                         {
-                            InitializeProcessor(processor);
+                            InitializeProcessor(processor, scopedServiceProvider);
 
                             Type inputType = processor.GetType().GenericTypeArguments[0];
 
@@ -70,7 +73,7 @@ namespace Processor.Internal
                         }
                         else
                         {
-                            InitializeProcessor(processor);
+                            InitializeProcessor(processor, scopedServiceProvider);
 
                             Execute(async () =>
                             {
@@ -102,11 +105,11 @@ namespace Processor.Internal
             }
         }
 
-        private void InitializeProcessor(object processor)
+        private void InitializeProcessor(object processor, IServiceProvider serviceProvider)
         {
             if (processor.GetType().IsSubclassOf(typeof(ProcessorBase)))
             {
-                ((ProcessorBase)processor).Initialize(_serviceProvider);
+                ((ProcessorBase)processor).Initialize(serviceProvider);
             }
         }
 
