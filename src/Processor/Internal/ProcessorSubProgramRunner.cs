@@ -57,17 +57,21 @@ namespace Processor.Internal
                         }
                         else if (processor.GetType().GetInterfaces().Contains(typeof(IProcessor<,>)) || processor.GetType().GetInterfaces().Contains(typeof(IProcessor<>)))
                         {
+                            InitializeProcessor(processor);
+
+                            Type inputType = processor.GetType().GenericTypeArguments[0];
+
+                            object input = Activator.CreateInstance(inputType);
+
                             Execute(async () =>
                             {
-                                Type inputType = processor.GetType().GenericTypeArguments[0];
-
-                                object input = Activator.CreateInstance(inputType);
-
                                 await ((dynamic)processor).ProcessAsync(input, cancellationToken);
                             });
                         }
                         else
                         {
+                            InitializeProcessor(processor);
+
                             Execute(async () =>
                             {
                                 await ((IProcessor)processor).ProcessAsync(cancellationToken);
@@ -95,6 +99,14 @@ namespace Processor.Internal
                 Console.WriteLine($"ERROR: {e.Message}");
                 Console.WriteLine("Press any key to continue");
                 Console.ReadKey();
+            }
+        }
+
+        private void InitializeProcessor(object processor)
+        {
+            if (processor.GetType().IsSubclassOf(typeof(ProcessorBase)))
+            {
+                ((ProcessorBase)processor).Initialize(_serviceProvider);
             }
         }
 

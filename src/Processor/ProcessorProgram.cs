@@ -12,7 +12,7 @@ namespace Processor
     {
         protected static async Task RunAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            // Build configuration
+            // Build the configuration
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", true)
                 .AddJsonFile($"appsettings.{EnvironmentName}.json", true)
@@ -23,13 +23,8 @@ namespace Processor
                 .Build();
 
             // Initialize a ServiceCollection
-            var services = new ServiceCollection();
-
-            // Add Configuration
-            services.AddSingleton<IConfiguration>(config);
-
-            // Add Logging
-            services
+            var services = new ServiceCollection()
+                .AddSingleton<IConfiguration>(config)
                 .AddLogging(builder =>
                 {
                     builder.AddConfiguration(config.GetSection("Logging"));
