@@ -80,6 +80,11 @@ namespace Processor.Internal
                                 await ((IProcessor)processor).ProcessAsync(cancellationToken);
                             });
                         }
+
+                        Console.WriteLine();
+                        Console.WriteLine("***Complete***");
+                        Console.WriteLine("Press any key to continue");
+                        Console.ReadKey();
                     }
                 }
             }
@@ -90,11 +95,6 @@ namespace Processor.Internal
             try
             {
                 action.Invoke();
-
-                Console.WriteLine();
-                Console.WriteLine("***Complete***");
-                Console.WriteLine("Press any key to continue");
-                Console.ReadKey();
             }
             catch (Exception e)
             {
