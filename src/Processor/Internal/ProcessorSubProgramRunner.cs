@@ -66,7 +66,7 @@ namespace Processor.Internal
 
                             object input = Activator.CreateInstance(inputType);
 
-                            Execute(async () =>
+                            await ExecuteAsync(async () =>
                             {
                                 await ((dynamic)processor).ProcessAsync(input, cancellationToken);
                             });
@@ -75,7 +75,7 @@ namespace Processor.Internal
                         {
                             InitializeProcessor(processor, scopedServiceProvider);
 
-                            Execute(async () =>
+                            await ExecuteAsync(async () =>
                             {
                                 await ((IProcessor)processor).ProcessAsync(cancellationToken);
                             });
@@ -90,11 +90,11 @@ namespace Processor.Internal
             }
         }
 
-        private static void Execute(Action action)
+        public async Task ExecuteAsync(Func<Task> process)
         {
             try
             {
-                action.Invoke();
+                await process();
             }
             catch (Exception e)
             {
