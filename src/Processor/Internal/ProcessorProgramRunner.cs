@@ -18,11 +18,9 @@ namespace Processor.Internal
 
         public async Task RunAsync(CancellationToken cancellationToken)
         {
-            bool isExit = false;
-
             ConsoleMenu consoleMenu = GetConsoleMenu();
 
-            while (!isExit)
+            do
             {
                 DisplayMainMenu(consoleMenu);
 
@@ -32,7 +30,7 @@ namespace Processor.Internal
 
                 if (selection.ToLower() == "x")
                 {
-                    isExit = true;
+                    break;
                 }
                 else
                 {
@@ -53,7 +51,7 @@ namespace Processor.Internal
                         await subApp.RunAsync(consoleMenuItem, cancellationToken);
                     }
                 }
-            }
+            } while (true);
         }
 
         private ConsoleMenu GetConsoleMenu()
@@ -103,10 +101,14 @@ namespace Processor.Internal
                     string k = processorAttr.Key ?? (j + 1).ToString();
                     string n = processorAttr.Name ?? t.Name;
 
+                    k = ToSingleCharacter(k);
+
                     var menuItem = new ConsoleSubMenuItem(k, n, t);
 
                     subMenuItems.Add(menuItem);
                 }
+
+                key = ToSingleCharacter(key);
 
                 var consoleMenuItem = new ConsoleMenuItem(key, name, subMenuItems);
 
@@ -121,6 +123,23 @@ namespace Processor.Internal
             return t.Namespace;
         }
 
+        private string ToSingleCharacter(string k)
+        {
+            if (!int.TryParse(k, out int key) || key < 10)
+            {
+                return k;
+            }
+
+            int i = key + 87;
+
+            if (i > 122)
+            {
+                throw new InvalidOperationException("Too many processors detected for the menu. You can have at most 36 processors.");
+            }
+
+            return ((char)i).ToString();
+        }
+
         private static void DisplayMainMenu(ConsoleMenu consoleMenu)
         {
             Console.Clear();
@@ -132,7 +151,7 @@ namespace Processor.Internal
                 Console.WriteLine(" ({0}) {1}", consoleAppMenu.Key, consoleAppMenu.Name);
             }
 
-            Console.WriteLine("{0}Enter {1}{2} (enter 'x' to exit)", Environment.NewLine, consoleMenu.ConsoleMenuItems.Min(s => s.Key), consoleMenu.ConsoleMenuItems.Count == 1 ? string.Empty : " - " + consoleMenu.ConsoleMenuItems.Max(s => s.Key));
+            Console.WriteLine("{0}Enter {1}{2} (enter 'x' to exit)", Environment.NewLine, consoleMenu.ConsoleMenuItems.Min(s => s.Key), consoleMenu.ConsoleMenuItems.Count == 1 ? string.Empty : " - " + consoleMenu.ConsoleMenuItems.Last().Key);
         }
     }
 }

@@ -18,9 +18,7 @@ namespace Processor.Internal
 
         public async Task RunAsync(ConsoleMenuItem consoleMenuItem, CancellationToken cancellationToken)
         {
-            bool isExit = false;
-
-            while (!isExit)
+            do
             {
                 DisplaySubMenu(consoleMenuItem);
 
@@ -30,7 +28,7 @@ namespace Processor.Internal
 
                 if (selection.ToLower() == "h")
                 {
-                    isExit = true;
+                    break;
                 }
                 else
                 {
@@ -87,7 +85,7 @@ namespace Processor.Internal
                         Console.ReadKey();
                     }
                 }
-            }
+            } while (true);
         }
 
         public async Task ExecuteAsync(Func<Task> process)
@@ -124,7 +122,7 @@ namespace Processor.Internal
                 Console.WriteLine(" ({0}) {1}", processor.Key, processor.Name);
             }
 
-            Console.WriteLine("{0}Enter {1}{2} (enter 'h' to return to the home menu)", Environment.NewLine, consoleMenuItem.Processors.Min(s => s.Key), consoleMenuItem.Processors.Count == 1 ? string.Empty : " - " + consoleMenuItem.Processors.Max(sm => sm.Key));
+            Console.WriteLine("{0}Enter {1}{2} (enter 'h' to return to the home menu)", Environment.NewLine, consoleMenuItem.Processors.Min(s => s.Key), consoleMenuItem.Processors.Count == 1 ? string.Empty : " - " + consoleMenuItem.Processors.Last().Key);
         }
     }
 }
